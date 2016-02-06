@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">BeSafe</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_add">Add</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_edit">Edit</string>
+    <string name="error_pin">Your pass must contain 4 digits</string>
+    <string name="error_name_empty">Can\'t be empty</string>
+    <string name="error_name_symbols">Can\'t start with special symbols</string>
+    <string name="error_name_exist">This name already exists</string>
+    <string name="error_tel">Input the correct tel number or move it to the \"Extra information\"</string>
+    <string name="error_pass">Password must contain at least 4 symbols</string>
+    <string name="pin_hint">Input your pass</string>
+    <string name="pin_first_hint">Pass guarantees encryption to all data, created in this session. To access your data, type the same pass next time</string>
+    <string name="empty_listview">Add new data \n or </string>
+    <string name="empty_listview_click"><u>login with another pass</u></string>
+    <string name="alert_delete">Are you sure you want to delete</string>
+    <string name="alert_btn_ok">OK</string>
+    <string name="alert_btn_cancel">CANCEL</string>
+    <string name="only_login">Fill the login, password or tel field</string>
+</resources>
