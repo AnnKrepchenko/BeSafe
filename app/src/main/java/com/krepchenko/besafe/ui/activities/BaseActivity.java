@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.krepchenko.besafe.R;
@@ -18,17 +19,33 @@ import com.krepchenko.besafe.db.SafeEntity;
  */
 public abstract class BaseActivity  extends AppCompatActivity {
 
+    private static final String KEY = "key";
+    protected static final String KEY_PASS = "key_pass";
+
     private Toolbar toolbar;
-    protected CryptManager cryptManager;
     protected SharedManager sharedManager;
+    protected String encryptedPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(savedInstanceState!=null){
+            encryptedPass = savedInstanceState.getString(KEY);
+        }
         setLayout();
         initToolbar();
-        cryptManager = ((SafeApplication)getApplicationContext()).getCryptManager();
         sharedManager = ((SafeApplication)getApplicationContext()).getSharedManager();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(KEY, encryptedPass);
+        super.onSaveInstanceState(outState);
     }
 
     abstract void setLayout();
@@ -48,5 +65,4 @@ public abstract class BaseActivity  extends AppCompatActivity {
             }
         });
     }
-
 }

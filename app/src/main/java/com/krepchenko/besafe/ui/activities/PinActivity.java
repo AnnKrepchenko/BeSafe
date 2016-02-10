@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.krepchenko.besafe.R;
 import com.krepchenko.besafe.core.SafeApplication;
+import com.krepchenko.besafe.crypt.CryptManager;
 
 /**
  * Created by Ann on 19.10.2015.
@@ -53,9 +54,8 @@ public class PinActivity extends AppCompatActivity implements  TextView.OnEditor
                     etPass.setError(getString(R.string.error_pin));
                 }
                 else {
-                    ((SafeApplication) getApplicationContext()).setCryptManager(etPass.getText().toString());
                     ((SafeApplication)getApplicationContext()).getSharedManager().setHintViewed();
-                    MainActivity.launch(this);
+                    MainActivity.launch(this,CryptManager.getEncryptedPass(etPass.getText().toString()));
                 }
             }
         }

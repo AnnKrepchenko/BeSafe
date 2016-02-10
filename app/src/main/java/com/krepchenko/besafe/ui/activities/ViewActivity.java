@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.krepchenko.besafe.R;
 import com.krepchenko.besafe.core.SafeApplication;
+import com.krepchenko.besafe.crypt.CryptManager;
 import com.krepchenko.besafe.db.SafeEntity;
 
 /**
@@ -26,9 +27,10 @@ public class ViewActivity extends BaseActivity {
     private String selection = SafeEntity._ID + "=?";
     private String[] selectionArgs;
 
-    public static void launch(Activity activity, String name) {
+    public static void launch(Activity activity, String name,String pass) {
         Intent intent = new Intent(activity, ViewActivity.class);
         intent.putExtra(KEY_ID, name);
+        intent.putExtra(KEY_PASS,pass);
         activity.startActivity(intent);
     }
 
@@ -36,6 +38,8 @@ public class ViewActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         id = getIntent().getStringExtra(KEY_ID);
+        if (getIntent().hasExtra(KEY_PASS))
+            encryptedPass = getIntent().getStringExtra(KEY_PASS);
         selectionArgs = new String[]{id};
         initBack();
     }
@@ -56,11 +60,11 @@ public class ViewActivity extends BaseActivity {
         if (cursor.moveToFirst()) {
             name = cursor.getString(cursor.getColumnIndex(SafeEntity.NAME));
             ((TextView) findViewById(R.id.view_name_tv)).setText(name);
-            ((TextView) findViewById(R.id.view_login_tv)).setText(cryptManager.decrypt(cursor.getString(cursor.getColumnIndex(SafeEntity.LOGIN))));
-            ((TextView) findViewById(R.id.view_pass_tv)).setText(cryptManager.decrypt(cursor.getString(cursor.getColumnIndex(SafeEntity.PASS))));
-            ((TextView) findViewById(R.id.view_tel_tv)).setText(cryptManager.decrypt(cursor.getString(cursor.getColumnIndex(SafeEntity.TEL))));
+            ((TextView) findViewById(R.id.view_login_tv)).setText(CryptManager.decrypt(encryptedPass,cursor.getString(cursor.getColumnIndex(SafeEntity.LOGIN))));
+            ((TextView) findViewById(R.id.view_pass_tv)).setText(CryptManager.decrypt(encryptedPass,cursor.getString(cursor.getColumnIndex(SafeEntity.PASS))));
+            ((TextView) findViewById(R.id.view_tel_tv)).setText(CryptManager.decrypt(encryptedPass,cursor.getString(cursor.getColumnIndex(SafeEntity.TEL))));
             final TextView tvExtra = ((TextView) findViewById(R.id.view_extra_tv));
-            tvExtra.setText(cryptManager.decrypt(cursor.getString(cursor.getColumnIndex(SafeEntity.EXTRA_INFORMATION))));
+            tvExtra.setText(CryptManager.decrypt(encryptedPass, cursor.getString(cursor.getColumnIndex(SafeEntity.EXTRA_INFORMATION))));
             tvExtra.setMovementMethod(new ScrollingMovementMethod());
 
         }
@@ -77,7 +81,7 @@ public class ViewActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_edit:
-                EditActivity.launch(this, id);
+                EditActivity.launch(this, id,encryptedPass);
                 return true;
             case R.id.action_delete:
                 deleteAction();

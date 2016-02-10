@@ -16,6 +16,7 @@ import android.widget.ListView;
 
 import com.krepchenko.besafe.R;
 import com.krepchenko.besafe.core.SafeApplication;
+import com.krepchenko.besafe.crypt.CryptManager;
 import com.krepchenko.besafe.db.SafeEntity;
 import com.krepchenko.besafe.ui.adapter.SafeCursorAdapter;
 
@@ -25,14 +26,17 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
     private ListView listView;
     private SafeCursorAdapter adapter;
 
-    public static void launch(Activity activity) {
+    public static void launch(Activity activity,String pass) {
         Intent intent = new Intent(activity, MainActivity.class);
+        intent.putExtra(KEY_PASS,pass);
         activity.startActivity(intent);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getIntent().hasExtra(KEY_PASS))
+            encryptedPass = getIntent().getStringExtra(KEY_PASS);
         initViews();
         getLoaderManager().initLoader(LOADER_ID, Bundle.EMPTY, this);
     }
@@ -47,7 +51,7 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddActivity.launch(MainActivity.this);
+                AddActivity.launch(MainActivity.this,encryptedPass);
             }
         });
         listView = (ListView) findViewById(R.id.main_listview);
@@ -87,9 +91,8 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.empty_link:
-                ((SafeApplication)getApplicationContext()).cleanCryptManaget();
                 PinActivity.launch(this);
                 finish();
                 break;
@@ -99,7 +102,7 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         listView.getAdapter().getItem(position);
-        ViewActivity.launch(this, String.valueOf(id));
+        ViewActivity.launch(this, String.valueOf(id),encryptedPass);
     }
 
     @Override
@@ -107,7 +110,7 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
         switch (id) {
             case LOADER_ID:
                 final String selection = SafeEntity.SECRET_FIELD + "=?";
-                final String[] selectionArgs = new String[]{cryptManager.getSecretField()};
+                final String[] selectionArgs = new String[]{CryptManager.getSecretField(encryptedPass)};
                 return new CursorLoader(
                         this,
                         SafeEntity.CONTENT_URI,
