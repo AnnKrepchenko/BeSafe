@@ -12,6 +12,7 @@
         <activity
             android:name=".ui.activities.MainActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
@@ -19,6 +20,7 @@
         <activity
             android:name=".ui.activities.PinActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible"
 
             android:noHistory="true"
@@ -32,16 +34,19 @@
         <activity
             android:name=".ui.activities.AddActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".ui.activities.ViewActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".ui.activities.EditActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <provider
@@ -51,6 +56,5 @@
             android:name="io.fabric.ApiKey"
             android:value="5a0a84e9107c086e09ab1f4cfb472377174db38a" />
     </application>
-
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
