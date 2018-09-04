@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "663276651237",
+    "firebase_url": "https://besafe-47f89.firebaseio.com",
+    "project_id": "besafe-47f89",
+    "storage_bucket": "besafe-47f89.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663276651237:android:bf310d1857fd15e5",
+        "android_client_info": {
+          "package_name": "com.krepchenko.besafe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663276651237-4ftombib0kdafmujkiji7locakef4pj2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3YE9F4Zf43aVH9C_npG84FUJErqRMCXA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
