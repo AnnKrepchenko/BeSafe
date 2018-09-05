@@ -1,8 +1,10 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "com.krepchenko.besafe"
@@ -10,13 +12,35 @@ android {
         targetSdkVersion 27
         versionCode 21
         versionName "2.0.0"
+
+        multiDexEnabled true
+
     }
+
+    signingConfigs {
+        debug {
+            storeFile file("keys/debug.jks")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+        release {
+            storeFile file("keys/release.jks")
+            storePassword "x8=yT8"
+            keyAlias "annkrepchenko"
+            keyPassword "x8=yT8"
+        }
+    }
+
     buildTypes {
-        debug{
+        debug {
+            signingConfig signingConfigs.debug
 
         }
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
+
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -24,11 +48,19 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:multidex:1.0.3'
+
+    implementation "com.google.firebase:firebase-auth:$firebaseAuthVersion"
+    implementation "com.google.android.gms:play-services-auth:$googleLoginVersion"
     testImplementation 'junit:junit:4.12'
-    implementation 'com.android.support:appcompat-v7:23.0.1'
-    implementation 'com.android.support:design:23.0.1'
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:design:$supportVersion"
     implementation 'com.scottyab:aescrypt:0.0.1'
-    implementation "com.google.firebase:firebase-database:$firebaseVersion"
+    implementation "com.android.support.constraint:constraint-layout:$constraintVersion"
+    implementation "com.google.firebase:firebase-firestore:$firebaseDbVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.ext.rxVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'

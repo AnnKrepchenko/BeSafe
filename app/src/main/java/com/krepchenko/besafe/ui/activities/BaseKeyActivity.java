@@ -17,7 +17,7 @@ import com.krepchenko.besafe.db.SafeEntity;
 /**
  * Created by Ann on 12.01.2016.
  */
-public abstract class BaseActivity  extends AppCompatActivity {
+public abstract class BaseKeyActivity extends BaseActivity {
 
     private static final String KEY = "key";
     protected static final String KEY_PASS = "key_pass";

@@ -12,7 +12,7 @@ import com.krepchenko.besafe.db.SafeEntity;
 /**
  * Created by Ann on 12.01.2016.
  */
-public class EditActivity extends InputActivity {
+public class EditKeyActivity extends InputKeyActivity {
 
 
     private static final String KEY_ID = "id";
@@ -21,7 +21,7 @@ public class EditActivity extends InputActivity {
     private String id;
 
     public static void launch(Activity activity, String id, String pass) {
-        Intent intent = new Intent(activity, EditActivity.class);
+        Intent intent = new Intent(activity, EditKeyActivity.class);
         intent.putExtra(KEY_ID, id);
         intent.putExtra(KEY_PASS, pass);
         activity.startActivity(intent);

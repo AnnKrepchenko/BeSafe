@@ -15,7 +15,7 @@ import com.krepchenko.besafe.utils.Utils;
 /**
  * Created by Ann on 04.02.2016.
  */
-public abstract class InputActivity extends BaseActivity {
+public abstract class InputKeyActivity extends BaseKeyActivity {
 
     protected String selectionName;
     protected String[] selectionArgsName;
@@ -42,14 +42,14 @@ public abstract class InputActivity extends BaseActivity {
     }
 
     private void initViews() {
-        etName = (EditText) findViewById(R.id.input_name_et);
-        etLogin = (EditText) findViewById(R.id.input_login_et);
-        etPass = (EditText) findViewById(R.id.input_pass_et);
-        etTel = (EditText) findViewById(R.id.input_tel_et);
-        etExtra = (EditText) findViewById(R.id.input_extra_et);
-        tilName = (TextInputLayout) findViewById(R.id.input_name_til);
-        tilTel = (TextInputLayout) findViewById(R.id.input_tel_til);
-        tilPass = (TextInputLayout) findViewById(R.id.input_pass_til);
+        etName = findViewById(R.id.input_name_et);
+        etLogin = findViewById(R.id.input_login_et);
+        etPass =findViewById(R.id.input_pass_et);
+        etTel = findViewById(R.id.input_tel_et);
+        etExtra = findViewById(R.id.input_extra_et);
+        tilName = findViewById(R.id.input_name_til);
+        tilTel = findViewById(R.id.input_tel_til);
+        tilPass = findViewById(R.id.input_pass_til);
     }
 
     @Override

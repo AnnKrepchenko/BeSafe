@@ -19,6 +19,7 @@ public interface SafeEntity {
     String TEL = "tel_number";
     String EXTRA_INFORMATION = "number";
     String SECRET_FIELD = "secret_field";
+    String EMAIL = "email";
 
     String CREATE_SCRIPT = "CREATE TABLE " + TABLE_NAME + " (" +
             _ID + " INTEGER PRIMARY KEY," +
