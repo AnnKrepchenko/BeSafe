@@ -1,10 +1,7 @@
 package com.krepchenko.besafe.ui.activities
 
 import android.app.Activity
-import android.app.LoaderManager
 import android.content.Intent
-import android.content.Loader
-import android.database.Cursor
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
@@ -17,14 +14,11 @@ import android.widget.TextView
 import com.krepchenko.besafe.R
 import com.krepchenko.besafe.core.SafeApplication
 import com.krepchenko.besafe.crypt.CryptManager
-import com.krepchenko.besafe.db.SafeEntity
 
 /**
  * Created by Ann on 19.10.2015.
  */
-class PinActivity : AppCompatActivity(), TextView.OnEditorActionListener, TextWatcher, LoaderManager.LoaderCallbacks<Cursor> {
-
-
+class PinActivity : AppCompatActivity(), TextView.OnEditorActionListener, TextWatcher {
 
 
     private var etPass: EditText? = null
@@ -96,22 +90,4 @@ class PinActivity : AppCompatActivity(), TextView.OnEditorActionListener, TextWa
         }
     }
 
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args)
-    {
-
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data )
-    {
-        adapter.changeCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader)
-    {
-        adapter.changeCursor(null);
-    }
 }

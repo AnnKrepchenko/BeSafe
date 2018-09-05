@@ -26,7 +26,7 @@ import com.krepchenko.besafe.utils.toast
 import kotlinx.android.synthetic.main.activity_login.*
 
 
-class LoginActivity : BaseActivity(),LoaderManager.LoaderCallbacks<Cursor>  {
+class LoginActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Cursor> {
 
     private val RC_SIGN_IN = 1001
     private val LOADER_ID = 0
