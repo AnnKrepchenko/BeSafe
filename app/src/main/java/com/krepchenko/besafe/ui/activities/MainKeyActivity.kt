@@ -55,7 +55,7 @@ open class MainKeyActivity : BaseKeyActivity(), View.OnClickListener, ItemsClick
                         val safes = mutableListOf<Safe>()
                         for (document in task.result) {
                             Log.d(TAG, document.id + " => " + document.data)
-                            safes.add(Safe(document.data[SafeEntity.NAME] as String, document.data[SafeEntity.PASS] as String, document.data[SafeEntity.LOGIN] as String, document.data[SafeEntity.TEL] as String, document.data[SafeEntity.EXTRA_INFORMATION] as String))
+                            safes.add(Safe(document.data[SafeEntity.NAME] as String, document.data[SafeEntity.PASS] as String, document.data[SafeEntity.LOGIN] as String, document.data[SafeEntity.TEL] as String, document.data[SafeEntity.EXTRA_INFORMATION] as String, GoogleSignIn.getLastSignedInAccount(this)!!.email!!))
                         }
                         updateAdapter(safes)
                     } else {
