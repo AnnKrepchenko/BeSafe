@@ -16,6 +16,7 @@ import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Scope
+import com.google.android.gms.common.util.CollectionUtils.mutableListOf
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.krepchenko.besafe.R
@@ -44,7 +45,6 @@ class LoginActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Cursor> {
                 .build()
         val account = GoogleSignIn.getLastSignedInAccount(this)
         signedIn(account)
-        loaderManager.restartLoader(LOADER_ID, Bundle.EMPTY, this)
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
@@ -76,7 +76,8 @@ class LoginActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Cursor> {
 
     private fun signedIn(googleAcc: GoogleSignInAccount?) {
         if (!TextUtils.isEmpty(googleAcc?.email)) {
-            startActivity(Intent(this, PinActivity::class.java))
+            loaderManager.restartLoader(LOADER_ID, Bundle.EMPTY, this)
+
         }
     }
 
@@ -161,17 +162,20 @@ class LoginActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Cursor> {
         cursor?.let {
             var safes = mutableListOf<Safe>()
             while (it.moveToNext()) {
-                val safe = Safe(it.getString(it.getColumnIndex(SafeEntity.NAME)), it.getString(it.getColumnIndex(SafeEntity.PASS)), it.getString(it.getColumnIndex(SafeEntity.LOGIN)), it.getString(it.getColumnIndex(SafeEntity.TEL)), it.getString(it.getColumnIndex(SafeEntity.EXTRA_INFORMATION)), GoogleSignIn.getLastSignedInAccount(this)!!.email!!)
+                val safe = Safe(it.getString(it.getColumnIndex(SafeEntity.NAME))?:"", it.getString(it.getColumnIndex(SafeEntity.PASS))?:"", it.getString(it.getColumnIndex(SafeEntity.LOGIN))?:"", it.getString(it.getColumnIndex(SafeEntity.TEL))?:"", it.getString(it.getColumnIndex(SafeEntity.EXTRA_INFORMATION))?:"", GoogleSignIn.getLastSignedInAccount(this)!!.email?:"")
                 safes.add(safe)
             }
-            FirebaseFirestore.getInstance().collection(SafeEntity.TABLE_NAME)
-                    .add(safes)
-                    .addOnSuccessListener {
-                        Log.d(TAG, "DocumentSnapshot written with ID: " + it.id)
-                    }
-                    .addOnFailureListener {
-                        Log.w(TAG, "Error adding document", it)
-                    }
+            for (safe:Safe in safes) {
+                FirebaseFirestore.getInstance().collection(SafeEntity.TABLE_NAME)
+                        .add(safe)
+                        .addOnSuccessListener {
+                            Log.d(TAG, "DocumentSnapshot written with ID: " + it.id)
+                            // startActivity(Intent(this, PinActivity::class.java))
+                        }
+                        .addOnFailureListener {
+                            Log.w(TAG, "Error adding document", it)
+                        }
+            }
         }
     }
 
