@@ -16,6 +16,7 @@ import com.krepchenko.besafe.db.Safe
 import com.krepchenko.besafe.db.SafeEntity
 import com.krepchenko.besafe.ui.adapter.ItemsClickListener
 import com.krepchenko.besafe.ui.adapter.SafeCursorAdapter
+import com.krepchenko.besafe.utils.DoubleClickPreventer
 import kotlinx.android.synthetic.main.content_main.*
 
 open class MainKeyActivity : BaseKeyActivity(), View.OnClickListener, ItemsClickListener {
@@ -35,7 +36,12 @@ open class MainKeyActivity : BaseKeyActivity(), View.OnClickListener, ItemsClick
     }
 
     private fun initViews() {
-        findViewById<View>(R.id.fab).setOnClickListener { AddKeyActivity.launch(this@MainKeyActivity, encryptedPass) }
+        findViewById<View>(R.id.fab).setOnClickListener {
+            DoubleClickPreventer.onClickWithCustomInterval(123L, {
+                AddKeyActivity.launch(this@MainKeyActivity, encryptedPass)
+                finish()
+            }, DoubleClickPreventer.MIN_CLICK_INTERVAL_500_MS)
+        }
         emptyView = layoutInflater.inflate(R.layout.view_empty, null)
         emptyView.findViewById<View>(R.id.empty_link).setOnClickListener(this)
         addContentView(emptyView, main_recyclerview!!.layoutParams)
@@ -55,7 +61,7 @@ open class MainKeyActivity : BaseKeyActivity(), View.OnClickListener, ItemsClick
                         val safes = mutableListOf<Safe>()
                         for (document in task.result) {
                             Log.d(TAG, document.id + " => " + document.data)
-                            safes.add(Safe(document.data[SafeEntity.NAME] as String, document.data[SafeEntity.PASS] as String, document.data[SafeEntity.LOGIN] as String, document.data[SafeEntity.TEL] as String, document.data[SafeEntity.EXTRA_INFORMATION] as String, GoogleSignIn.getLastSignedInAccount(this)!!.email!!))
+                            safes.add(Safe(document.data[SafeEntity.NAME] as String, document.data[SafeEntity.PASS] as String, document.data[SafeEntity.LOGIN] as String, document.data[SafeEntity.TEL] as String, document.data[SafeEntity.EXTRA_INFORMATION] as String, serverId = document.id))
                         }
                         updateAdapter(safes)
                     } else {
@@ -80,7 +86,7 @@ open class MainKeyActivity : BaseKeyActivity(), View.OnClickListener, ItemsClick
         }
     }
 
-    private fun clearAdapter(){
+    private fun clearAdapter() {
         adapter?.clearList()
         emptyView.visibility = View.VISIBLE
     }
@@ -99,19 +105,22 @@ open class MainKeyActivity : BaseKeyActivity(), View.OnClickListener, ItemsClick
     override fun onClick(v: View) {
         when (v.id) {
             R.id.empty_link -> {
-                PinActivity.launch(this)
-                finish()
+                DoubleClickPreventer.onClickWithCustomInterval(123L, {
+                    PinActivity.launch(this)
+                    finish()
+                }, DoubleClickPreventer.MIN_CLICK_INTERVAL_500_MS)
+
+
             }
         }
     }
 
     override fun itemClicked(safe: Safe, position: Int) {
-        Log.e("fuck", "clicked")
         ViewKeyActivity.launch(this, safe, encryptedPass)
+        finish()
     }
 
     companion object {
-
 
 
         fun launch(activity: Activity, pass: String) {
@@ -120,9 +129,5 @@ open class MainKeyActivity : BaseKeyActivity(), View.OnClickListener, ItemsClick
             activity.startActivity(intent)
         }
     }
-    /*
-
-*/
-
 
 }

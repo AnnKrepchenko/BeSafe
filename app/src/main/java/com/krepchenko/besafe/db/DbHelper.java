@@ -8,11 +8,9 @@ public class DbHelper extends SQLiteOpenHelper {
 
 	private static final String NAME = "safe_db";
 	private static final int VERSION = 1;
-	private Context context;
 
 	public DbHelper(Context context) {
 		super(context, NAME, null, VERSION);
-		this.context = context;
 	}
 
 	@Override

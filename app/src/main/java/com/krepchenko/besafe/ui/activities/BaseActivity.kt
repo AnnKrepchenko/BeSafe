@@ -1,13 +1,31 @@
 package com.krepchenko.besafe.ui.activities
 
-import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.google.firebase.firestore.FirebaseFirestore
+import com.krepchenko.besafe.ui.dialogs.LoadingDialog
 
-public abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity() {
 
     protected var TAG = this.javaClass.canonicalName
+    private val DIALOG_TAG = "dialog_tag"
 
-    protected lateinit var firestore:FirebaseFirestore
+    private var loadingDialog: LoadingDialog? = null
 
+
+    fun startLoadingDialog() {
+        stopLoadingDialog()
+        runOnUiThread {
+            if (loadingDialog == null) {
+                loadingDialog = LoadingDialog.start(supportFragmentManager, DIALOG_TAG)
+            }
+        }
+    }
+
+    fun stopLoadingDialog() {
+        runOnUiThread {
+            if (loadingDialog != null && !isFinishing) {
+                loadingDialog?.dismissAllowingStateLoss()
+                loadingDialog = null
+            }
+        }
+    }
 }

@@ -18,6 +18,7 @@ public class SafeApplication extends Application {
         sharedManager = new SharedManager(this);
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
+                .setTimestampsInSnapshotsEnabled(true)
                 .build();
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         firestore.setFirestoreSettings(settings);

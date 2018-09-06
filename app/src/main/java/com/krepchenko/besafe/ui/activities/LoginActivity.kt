@@ -76,6 +76,7 @@ class LoginActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Cursor> {
 
     private fun signedIn(googleAcc: GoogleSignInAccount?) {
         if (!TextUtils.isEmpty(googleAcc?.email)) {
+            startLoadingDialog()
             loaderManager.restartLoader(LOADER_ID, Bundle.EMPTY, this)
 
         }
@@ -87,7 +88,7 @@ class LoginActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Cursor> {
         } ?: run {
             initGoogleSDK(object : CustomConsumer<Boolean> {
                 override fun accept(connected: Boolean) {
-                    if (connected!!) {
+                    if (connected) {
                         handleSignInRequest()
                     } else {
                         toast(R.string.google_connection_failed)
@@ -160,17 +161,32 @@ class LoginActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor?) {
         cursor?.let {
+            if(it.count<1){
+                redirectToPin()
+            }
             var safes = mutableListOf<Safe>()
             while (it.moveToNext()) {
-                val safe = Safe(it.getString(it.getColumnIndex(SafeEntity.NAME))?:"", it.getString(it.getColumnIndex(SafeEntity.PASS))?:"", it.getString(it.getColumnIndex(SafeEntity.LOGIN))?:"", it.getString(it.getColumnIndex(SafeEntity.TEL))?:"", it.getString(it.getColumnIndex(SafeEntity.EXTRA_INFORMATION))?:"", GoogleSignIn.getLastSignedInAccount(this)!!.email?:"")
+                val safe = Safe(it.getString(it.getColumnIndex(SafeEntity.NAME))
+                        ?: "", it.getString(it.getColumnIndex(SafeEntity.PASS))
+                        ?: "", it.getString(it.getColumnIndex(SafeEntity.LOGIN))
+                        ?: "", it.getString(it.getColumnIndex(SafeEntity.TEL))
+                        ?: "", it.getString(it.getColumnIndex(SafeEntity.EXTRA_INFORMATION))
+                        ?: "", GoogleSignIn.getLastSignedInAccount(this)!!.email ?: "")
                 safes.add(safe)
             }
-            for (safe:Safe in safes) {
+            var count = 0
+            for (safe: Safe in safes) {
                 FirebaseFirestore.getInstance().collection(SafeEntity.TABLE_NAME)
                         .add(safe)
                         .addOnSuccessListener {
                             Log.d(TAG, "DocumentSnapshot written with ID: " + it.id)
-                            // startActivity(Intent(this, PinActivity::class.java))
+                            val selection = SafeEntity.NAME + "=? AND " + SafeEntity.PASS + "=?"
+                            val selectionArgs = arrayOf(safe.name, safe.pass)
+                            contentResolver.delete(SafeEntity.CONTENT_URI, selection, selectionArgs)
+                            count++
+                            if (count == safes.size) {
+                                redirectToPin()
+                            }
                         }
                         .addOnFailureListener {
                             Log.w(TAG, "Error adding document", it)
@@ -179,9 +195,11 @@ class LoginActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Cursor> {
         }
     }
 
+    override fun onLoaderReset(loader: Loader<Cursor>) {}
 
-    override fun onLoaderReset(loader: Loader<Cursor>) {
-
+    private fun redirectToPin() {
+        stopLoadingDialog()
+        startActivity(Intent(this, PinActivity::class.java))
     }
 
 }

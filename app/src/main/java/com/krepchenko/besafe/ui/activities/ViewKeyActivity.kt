@@ -5,11 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.text.method.ScrollingMovementMethod
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.google.firebase.firestore.FirebaseFirestore
 import com.krepchenko.besafe.R
 import com.krepchenko.besafe.crypt.CryptManager
 import com.krepchenko.besafe.db.Safe
+import com.krepchenko.besafe.db.SafeEntity
 import kotlinx.android.synthetic.main.content_view.*
 
 /**
@@ -54,8 +57,8 @@ class ViewKeyActivity : BaseKeyActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_edit -> {
-                // EditKeyActivity.launch(this, id, encryptedPass)
-                //todo implement
+                 EditKeyActivity.launch(this, safe, encryptedPass)
+                finish()
                 return true
             }
             R.id.action_delete -> {
@@ -69,10 +72,19 @@ class ViewKeyActivity : BaseKeyActivity() {
     private fun deleteAction() {
         val builder = AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
         builder.setMessage(getString(R.string.alert_delete) + " " + safe.name + "?")
-        builder.setPositiveButton(R.string.alert_btn_ok) { dialog, which ->
-            /* contentResolver.delete(SafeEntity.CONTENT_URI, selection, selectionArgs)
-             finish()*/
-            //todo implemetnt
+        builder.setPositiveButton(R.string.alert_btn_ok) { _, _ ->
+            startLoadingDialog()
+            FirebaseFirestore.getInstance().collection(SafeEntity.TABLE_NAME)
+                    .document(safe.serverId).delete()
+                    .addOnCompleteListener { task ->
+                        stopLoadingDialog()
+                        if (task.isSuccessful) {
+                            MainKeyActivity.launch(this,encryptedPass)
+                            finish()
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.exception)
+                        }
+                    }
         }
         builder.setNegativeButton(R.string.alert_btn_cancel, null)
         builder.show()
