@@ -10,7 +10,7 @@ android {
         applicationId "com.krepchenko.besafe"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 21
+        versionCode 22
         versionName "2.0.0"
 
         multiDexEnabled true
@@ -26,9 +26,9 @@ android {
         }
         release {
             storeFile file("keys/release.jks")
-            storePassword "x8=yT8"
-            keyAlias "annkrepchenko"
-            keyPassword "x8=yT8"
+            storePassword "xxxxxx"
+            keyAlias "xxxxxx"
+            keyPassword "xxxxxxx"
         }
     }
 
