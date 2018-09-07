@@ -9,8 +9,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.firebase.firestore.FirebaseFirestore
 import com.krepchenko.besafe.R
+import com.krepchenko.besafe.core.SafeApplication
 import com.krepchenko.besafe.crypt.CryptManager
 import com.krepchenko.besafe.db.Safe
 import com.krepchenko.besafe.db.SafeEntity
@@ -52,7 +52,8 @@ open class MainKeyActivity : BaseKeyActivity(), View.OnClickListener, ItemsClick
     override fun onResume() {
         super.onResume()
         clearAdapter()
-        FirebaseFirestore.getInstance().collection(SafeEntity.TABLE_NAME)
+        (application as SafeApplication).firestore.collection(SafeEntity.TABLE_NAME)
+                .orderBy(SafeEntity.NAME)
                 .whereEqualTo(SafeEntity.SECRET_FIELD, CryptManager.getSecretField(encryptedPass))
                 .whereEqualTo(SafeEntity.EMAIL, GoogleSignIn.getLastSignedInAccount(this)!!.email)
                 .get()

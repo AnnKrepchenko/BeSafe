@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 public class SafeApplication extends Application {
 
     private SharedManager sharedManager;
+    public FirebaseFirestore firestore;
 
     @Override
     public void onCreate() {
@@ -20,7 +21,7 @@ public class SafeApplication extends Application {
                 .setPersistenceEnabled(true)
                 .setTimestampsInSnapshotsEnabled(true)
                 .build();
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore = FirebaseFirestore.getInstance();
         firestore.setFirestoreSettings(settings);
     }
 
