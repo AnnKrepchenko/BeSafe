@@ -200,6 +200,7 @@ class LoginActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Cursor> {
     private fun redirectToPin() {
         stopLoadingDialog()
         startActivity(Intent(this, PinActivity::class.java))
+        finish()
     }
 
 }

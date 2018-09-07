@@ -55,15 +55,7 @@ class PinActivity : AppCompatActivity(), TextView.OnEditorActionListener, TextWa
 
     private fun submitText() {
         (applicationContext as SafeApplication).sharedManager.setHintViewed()
-
-        dbSetup()
-
         MainKeyActivity.launch(this, CryptManager.getEncryptedPass(etPass!!.text.toString()))
-    }
-
-    private fun dbSetup() {
-
-
     }
 
     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {

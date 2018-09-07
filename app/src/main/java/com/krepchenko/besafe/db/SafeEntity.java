@@ -15,9 +15,9 @@ public interface SafeEntity {
     String _ID = "_id";
     String NAME = "name";
     String PASS = "pass";
-    String LOGIN = "popularity";
-    String TEL = "tel_number";
-    String EXTRA_INFORMATION = "number";
+    String LOGIN = "login";
+    String TEL = "tel";
+    String EXTRA_INFORMATION = "extraInfo";
     String SECRET_FIELD = "secret_field";
     String EMAIL = "email";
 

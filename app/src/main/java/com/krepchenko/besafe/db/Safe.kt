@@ -3,7 +3,7 @@ package com.krepchenko.besafe.db
 import android.os.Parcel
 import android.os.Parcelable
 
-data class Safe(var name: String, var pass: String, var login: String, var tel: String, var extraInfo: String, var email: String = "email@email.com",var serverId: String="0") : Parcelable {
+data class Safe(var name: String = "", var pass: String = "", var login: String = "", var tel: String = "", var extraInfo: String = "", var email: String = "email@email.com", var serverId: String = "0") : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readString(),
             parcel.readString(),
@@ -11,8 +11,7 @@ data class Safe(var name: String, var pass: String, var login: String, var tel: 
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
-            parcel.readString()) {
-    }
+            parcel.readString())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
